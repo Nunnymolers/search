@@ -9,6 +9,8 @@ var path = require('path');
 
 /* Creates an express application */
 var app = express();
+var bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '16mb' }));
 
 /* Creates the web server */
 var server = http.createServer(app);
@@ -27,6 +29,11 @@ app.get('/', (req, res, next) => {
 	res.sendFile(filePath);
 });
 
+app.post('/', (req, res, next) => {
+
+	console.log(req.body)
+	res.send('OK')
+});
 
 /* Defines what function to all when the server recieves any request from http://localhost:8080 */
 server.on('listening', () => {
