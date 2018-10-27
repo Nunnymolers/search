@@ -7,6 +7,12 @@ var http = require('http');
 /* The path module is used to transform relative paths to absolute paths */
 var path = require('path');
 
+var searchmodel = require('./search.js').getModel();
+
+
+var mongoose = require('mongoose');
+var dbAddress = process.env.MONGODB_URI || 'mongodb://127.0.0.1/search';
+
 /* Creates an express application */
 var app = express();
 var bodyParser = require('body-parser');
@@ -18,22 +24,28 @@ var server = http.createServer(app);
 /* Defines what port to use to listen to web requests */
 var port =  process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
+function startServer() {
 
+	app.get('/', (req, res, next) => {
+
+		/* Get the absolute path of the html file */
+		var filePath = path.join(__dirname, './index.html')
+
+		/* Sends the html file back to the browser */
+		res.sendFile(filePath);
+	});
+
+	app.post('/', (req, res, next) => {
+
+		var newquery = new searchmodel(req.body);
+		newquery.save(function(err) {
+			res.send(err || 'OK');
+		});
+	});
+
+}
 /* Defines what function to call when a request comes from the path '/' in http://localhost:8080 */
-app.get('/', (req, res, next) => {
 
-	/* Get the absolute path of the html file */
-	var filePath = path.join(__dirname, './index.html')
-
-	/* Sends the html file back to the browser */
-	res.sendFile(filePath);
-});
-
-app.post('/', (req, res, next) => {
-
-	console.log(req.body)
-	res.send('OK')
-});
 
 /* Defines what function to all when the server recieves any request from http://localhost:8080 */
 server.on('listening', () => {
@@ -51,3 +63,4 @@ server.on('listening', () => {
 
 /* Tells the server to start listening to requests from defined port */
 server.listen(port);
+mongoose.connect(dbAddress, startServer)
