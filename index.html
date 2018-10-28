@@ -2,6 +2,32 @@
 <html>
 	<head>
 		<title>home</title>
+		<link rel="icon" href="favicon.png">
+		<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+		<style>
+			*{
+				margin:0;
+				padding:0;
+			}
+			*:focus{
+				outline:none !important;
+			}
+			body{
+				background-image: url(https://images.unsplash.com/photo-1525020598777-a02a0608b8fd?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4d31a3c7f73ae8a7552e8818081fd97f&auto=format&fit=crop&w=1500&q=80);
+				background-position: center 25% ;
+				background-color: #36393e;
+			}
+			input{
+				font-family: 'Titillium Web', sans-serif;
+				font-size:2vw;
+				margin:45vh 31.5vw;
+				color:white;
+        background-color:rgba(0, 0, 0, 0.49);
+        padding:1vw;
+				width:35vw;
+				border:none;
+			}
+		</style>
 	</head>
 	<body>
 		<input type="text" name="search" placeholder="Search.." id='search'>
@@ -66,7 +92,7 @@
 
 			//Event listeners
 			$search.addEventListener('keydown', hi);
-			
+
 		</script>
 	</body>
 </html>
