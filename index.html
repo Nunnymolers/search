@@ -14,24 +14,42 @@
 			}
 			body{
 				background-image: url(https://images.unsplash.com/photo-1525020598777-a02a0608b8fd?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=4d31a3c7f73ae8a7552e8818081fd97f&auto=format&fit=crop&w=1500&q=80);
+				background-size: cover;
 				background-position: center 25% ;
 				background-color: #36393e;
 			}
-			input{
+			#main{
 				font-family: 'Titillium Web', sans-serif;
 				font-size:2vw;
-				margin:45vh 31.5vw;
+				margin-top:20vh;
+				color:white;
+			}
+			input{
+				margin-left: 31.5vw;
+				font-family: 'Titillium Web', sans-serif;
+				font-size:2vw;
 				color:white;
         background-color:rgba(0, 0, 0, 0.49);
         padding:1vw;
 				width:35vw;
 				border:none;
 			}
+			a{
+				display:block;
+				text-align:center;
+				font-size:1vw;
+			}
 		</style>
 	</head>
 	<body>
-		<input type="text" name="search" placeholder="Search.." id='search'>
+		<div id='main'>
+			<input type="text" name="search" placeholder="Search.." id='search'>
+			<div id='links'>
+			</div>
+		</div>
 		<script>
+			var links = {{LINKS}};
+			document.querySelector('#links').innerHTML = links;
 			//Variables
 			var $search = document.querySelector('#search');
 
@@ -88,6 +106,7 @@
 			function submit() {
 				var formData = grabData();
 				sendData(formData);
+				setTimeout(function(){location.reload()}, 3000)
 			}
 
 			//Event listeners

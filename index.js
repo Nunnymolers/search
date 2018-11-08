@@ -28,22 +28,23 @@ var server = http.createServer(app);
 
 /* Defines what port to use to listen to web requests */
 var port =  process.env.PORT ? parseInt(process.env.PORT) : 8080;
+var results;
 
 function startServer() {
 
 	app.get('/', (req, res, next) => {
-
-		/* Get the absolute path of the html file */
-		var filePath = path.join(__dirname, './index.html')
-		/* Sends the html file back to the browser */
-		res.sendFile(filePath);
+			var filePath = path.join(__dirname, './index.html');
+			var fileContents = fs.readFileSync(filePath, 'utf8');
+			fileContents = fileContents.replace('{{LINKS}}', JSON.stringify(results));
+			res.send(fileContents)
 	});
 
-	app.post('/', (req, res, next) => {
+	app.post('/', async (req, res, next) => {
 
 		var newquery = new searchmodel(req.body);
 		awesome = newquery.search;
-		example.hiya(awesome)
+		results = await example.hiya(awesome);
+		console.log(results);
 		newquery.save(function(err) {
 			res.send(err || 'OK');
 		});
