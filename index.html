@@ -21,11 +21,11 @@
 			#main{
 				font-family: 'Titillium Web', sans-serif;
 				font-size:2vw;
-				margin-top:20vh;
+				margin-top:10vh;
 				color:white;
 			}
 			input{
-				margin-left: 31.5vw;
+				margin-left: 20vw;
 				font-family: 'Titillium Web', sans-serif;
 				font-size:2vw;
 				color:white;
@@ -36,8 +36,17 @@
 			}
 			a{
 				display:block;
-				text-align:center;
-				font-size:1vw;
+				text-align:left;
+				font-size:1.5vw;
+				color:white;
+			}
+			#links{
+				margin-top:10vh;
+				margin-left: 20vw;
+				margin-right:20vw;
+				background-color:rgba(0, 0, 0, 0.49);
+        padding:1vw;
+				border:none;
 			}
 		</style>
 	</head>
@@ -49,11 +58,12 @@
 		</div>
 		<script>
 			var links = {{LINKS}};
-			document.querySelector('#links').innerHTML = links;
+			document.querySelector('#links').innerHTML = links.join('\n');
 			//Variables
 			var $search = document.querySelector('#search');
 
 			//Functions
+
 			function hi(e){
 				if(e.key === "Enter"){
 					submit()
