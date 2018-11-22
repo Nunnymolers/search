@@ -35,7 +35,7 @@ function startServer() {
 	app.get('/', (req, res, next) => {
 			var filePath = path.join(__dirname, './index.html');
 			var fileContents = fs.readFileSync(filePath, 'utf8');
-			fileContents = fileContents.replace('{{LINKS}}', JSON.stringify(results));
+			fileContents = fileContents.replace('"{{LINKS}}"', JSON.stringify(results));
 			res.send(fileContents)
 	});
 

@@ -57,8 +57,10 @@
 			</div>
 		</div>
 		<script>
-			var links = {{LINKS}};
-			document.querySelector('#links').innerHTML = links.join('\n');
+			var links = "{{LINKS}}";
+			if(links != undefined){
+				document.querySelector('#links').innerHTML = links.join('\n');
+			}
 			//Variables
 			var $search = document.querySelector('#search');
 
