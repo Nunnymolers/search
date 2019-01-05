@@ -3,7 +3,7 @@
 	<head>
 		<title>home</title>
 		<link rel="icon" href="favicon.png">
-		<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
 		<style>
 			*{
 				margin:0;
@@ -19,14 +19,14 @@
 				background-color: #36393e;
 			}
 			#main{
-				font-family: 'Titillium Web', sans-serif;
+				font-family: 'Source Sans Pro', sans-serif;
 				font-size:2vw;
 				margin-top:10vh;
 				color:white;
 			}
 			input{
 				margin-left: 20vw;
-				font-family: 'Titillium Web', sans-serif;
+				font-family: 'Source Sans Pro', sans-serif;
 				font-size:2vw;
 				color:white;
         background-color:rgba(0, 0, 0, 0.49);
@@ -47,6 +47,10 @@
 				background-color:rgba(0, 0, 0, 0.49);
         padding:1vw;
 				border:none;
+				height:40vh;
+				overflow-y: scroll;
+				padding:1vw;
+
 			}
 		</style>
 	</head>
@@ -56,11 +60,17 @@
 			<div id='links'>
 			</div>
 		</div>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.slim.js'></script>
+
 		<script>
+			var socket = io();
 			var links = "{{LINKS}}";
 			if(links != undefined){
-				document.querySelector('#links').innerHTML = links.join('\n');
+				document.querySelector('#links').innerHTML = 'Look something up';
 			}
+			socket.on('new message', function(message) {
+				document.querySelector('#links').innerHTML = message.map(m => m.link).join('\n');
+			});
 			//Variables
 			var $search = document.querySelector('#search');
 
@@ -68,61 +78,16 @@
 
 			function hi(e){
 				if(e.key === "Enter"){
-					submit()
+					if($search.value) {
+						socket.emit('message', $search.value);
+						$search.value = '';
+					}
+					// submit()
 				}
 			}
-
-			function grabData() {
-
-				// Getting all the input tags
-				var $inputs = document.querySelectorAll('input');
-
-				// Defining a variable to store all the data
-				var data = {};
-
-				// Looping through all the input tags
-				for(var i = 0; i < $inputs.length; i++) {
-
-					// Getting the ith input tag
-					var $input = $inputs[i];
-
-					// Getting the name of the data that the input tag holds
-					var name = $input.name;
-
-					// Getting the value that the user entered into the input tag
-					var value = $input.value;
-
-					// Storing the value and its name
-					data[name] = value
-				}
-
-				// Outputting the data
-				return data;
-			}
-
-			function sendData(data) {
-
-				// Creating a new request to the server that contains the data
-				var req = new XMLHttpRequest();
-
-				// Opening up a connection with the server to 'POST' data
-				req.open('POST', '/', true);
-
-				// Explain to the server that we are sending the data in json format
-				req.setRequestHeader('content-type', 'application/json')
-
-				// Sending the data in JSON format
-				req.send(JSON.stringify(data));
-			}
-
-			function submit() {
-				var formData = grabData();
-				sendData(formData);
-				setTimeout(function(){location.reload()}, 3000)
-			}
-
 			//Event listeners
 			$search.addEventListener('keydown', hi);
+
 
 		</script>
 	</body>

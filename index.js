@@ -12,6 +12,7 @@ var fs = require('fs');
 var path = require('path');
 
 var searchmodel = require('./search.js').getModel();
+
 var example = require('./example.js');
 
 
@@ -30,26 +31,41 @@ var server = http.createServer(app);
 var port =  process.env.PORT ? parseInt(process.env.PORT) : 8080;
 var results;
 
-function startServer() {
+var Io = require('socket.io');
+var io = Io(server);
 
+function addSockets() {
+	io.on('connection', (socket) => {
+		console.log('user connected')
+		socket.on('disconnect', () => {
+			console.log('user disconnected');
+		})
+		socket.on('message', async (message) => {
+			io.emit('new message', message);
+			var newquery = new searchmodel({search:message});
+			results = await example.searchScrape(message);
+			io.emit('new message', results);
+
+			// newquery.save(function(err) {
+			// 	res.send(err || 'OK');
+			// });
+			// return awesome;
+		})
+	})
+}
+
+
+function startServer() {
+	addSockets();
 	app.get('/', (req, res, next) => {
 			var filePath = path.join(__dirname, './index.html');
 			var fileContents = fs.readFileSync(filePath, 'utf8');
 			fileContents = fileContents.replace('"{{LINKS}}"', JSON.stringify(results));
 			res.send(fileContents)
 	});
-
-	app.post('/', async (req, res, next) => {
-
-		var newquery = new searchmodel(req.body);
-		awesome = newquery.search;
-		results = await example.hiya(awesome);
-		console.log(results);
-		newquery.save(function(err) {
-			res.send(err || 'OK');
-		});
-		return awesome;
-	});
+	// app.post('/', async (req, res, next) => {
+	// 	return awesome;
+	// });*/
 
 }
 /* Defines what function to call when a request comes from the path '/' in http://localhost:8080 */
